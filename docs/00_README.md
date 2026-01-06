@@ -121,30 +121,8 @@ Mark completed items:
 
 ## How to Use This Documentation
 
-1. **Learning Phase**: Start with 01-05 documents for understanding
-2. **Implementation Phase**: Reference 06-08 documents during coding
-3. **Validation Phase**: Use 09-10 documents for verification
-4. **Troubleshooting**: Check CHALLENGES_AND_SOLUTIONS for known issues
-5. **Reproduction**: Follow IMPLEMENTATION_GUIDE for step-by-step reproduction
-
-## Status Overview
-
-| Document | Status | Due Date |
-|----------|--------|----------|
-| 01_nano_vllm_architecture.md | ⏳ In Progress | Week 2 |
-| 02_memory_management.md | ⏳ Pending | Week 4 |
-| 03_attention_analysis.md | ⏳ Pending | Week 5 |
-| 04_baseline_metrics.md | ⏳ Pending | Week 6 |
-| 05_nano_vs_vllm_comparison.md | ⏳ Pending | Week 6 |
-| 06_fusion_design.md | ⏳ Pending | Week 7 |
-| 07_kernel_optimization.md | ⏳ Pending | Week 11 |
-| 08_validation_report.md | ⏳ Pending | Week 12 |
-| 09_performance_analysis.md | ⏳ Pending | Week 16 |
-| 10_benchmark_comparison.md | ⏳ Pending | Week 17 |
-| CHALLENGES_AND_SOLUTIONS.md | ⏳ Pending | Week 22 |
-| IMPLEMENTATION_GUIDE.md | ⏳ Pending | Week 22 |
-
----
-
-**Last Updated**: January 6, 2026  
-**Project Timeline**: April 2025 – September 2025
+1. Learning Phase: Start with 01-05 documents for understanding
+2. Implementation Phase: Reference 06-08 documents during coding
+3. Validation Phase: Use 09-10 documents for verification
+4. Troubleshooting: Check challenges.md for known issues
+5. Reproduction: Follow implementation_guide.md for step-by-step instructions

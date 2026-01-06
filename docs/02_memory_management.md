@@ -1,9 +1,5 @@
 # 2. Memory Management in nano-vLLM
 
-**Phase**: 1 (Weeks 2-3)  
-**Status**: 🔧 In Progress  
-**Last Updated**: January 6, 2026
-
 ## Overview
 
 This document analyzes memory management strategies in nano-vLLM, focusing on KV cache handling, memory allocation patterns, and optimization opportunities compared to vLLM.
