@@ -1,7 +1,7 @@
 # 2. Memory Management in nano-vLLM
 
 **Phase**: 1 (Weeks 2-3)  
-**Status**: To be completed  
+**Status**: 🔧 In Progress  
 **Last Updated**: January 6, 2026
 
 ## Overview
@@ -11,16 +11,16 @@ This document analyzes memory management strategies in nano-vLLM, focusing on KV
 ## Sections to Complete
 
 ### 2.1 KV Cache Management
-- [ ] KV cache storage structure
-- [ ] Cache allocation and initialization
-- [ ] Cache update patterns during inference
-- [ ] Memory layout and access patterns
+- [x] KV cache storage structure — **DONE** (block-based tables)
+- [x] Cache allocation and initialization — **DONE** (BlockManager)
+- [x] Cache update patterns during inference — **DONE** (prefill/decode paths)
+- [ ] Memory layout and access patterns — **TODO** (need profiling)
 
 ### 2.2 Memory Allocation Strategies
-- [ ] Dynamic vs static allocation
-- [ ] Paging mechanisms
-- [ ] Memory pooling and reuse
-- [ ] Fragmentation analysis
+- [x] Dynamic vs static allocation — **DONE** (static pool, dynamic assignment)
+- [x] Paging mechanisms — **DONE** (fixed-size blocks, hash reuse)
+- [ ] Memory pooling and reuse — **TODO** (measure reuse rate)
+- [ ] Fragmentation analysis — **TODO** (analyze partial blocks)
 
 ### 2.3 Comparison with vLLM
 - [ ] PagedAttention memory model
@@ -29,10 +29,10 @@ This document analyzes memory management strategies in nano-vLLM, focusing on KV
 - [ ] Scalability characteristics
 
 ### 2.4 Optimization Opportunities
-- [ ] Identified bottlenecks
-- [ ] Potential improvements
-- [ ] Impact analysis
-- [ ] Trade-offs
+- [x] Identified bottlenecks — **DONE** (hash lookup + partial-block handling)
+- [x] Potential improvements — **DONE** (prefetch, better hashing reuse)
+- [ ] Impact analysis — **TODO** (quantify cache hit rate)
+- [ ] Trade-offs — **TODO** (memory vs compute)
 
 ## Key Files to Study
 
@@ -51,23 +51,35 @@ vllm/
 ## Findings
 
 ### KV Cache Organization
-*To be filled in after analysis*
+- **Block size**: 256 tokens (`Sequence.block_size`)
+- **Blocks**: Fixed pool created at `BlockManager(num_blocks, block_size)` from config
+- **Block table**: Each sequence holds a list of block IDs (`seq.block_table`)
+- **Hashing for reuse**: xxhash64 of token_ids (optionally chained with previous block hash) used to deduplicate full blocks
+- **Prefix reuse**: If hash matches and token_ids match, block is reused and `ref_count` increments; otherwise allocate new block
+- **Partial blocks**: Last block is unhashed until full; hashed and inserted into `hash_to_block_id` only when full
 
 ### Memory Allocation Patterns
-*To be filled in after analysis*
+- **Static pool, dynamic assignment**: Blocks are preallocated IDs; allocation only updates tables, not tensors (tensors live elsewhere)
+- **Free/used tracking**: `free_block_ids` deque and `used_block_ids` set manage availability
+- **Prefill phase**: `allocate(seq)` reserves blocks for entire prompt; cache hits add `num_cached_tokens`
+- **Decode phase**: `may_append(seq)` handles single-token appends; allocates a new block when a new block starts, hashes and finalizes when block fills
+- **Deallocation**: On sequence finish or preempt, `deallocate(seq)` decrements `ref_count`; frees when zero
+- **Cache miss path**: Falls back to next free block; updates hash table only when block is full
 
 ### Performance Implications
-*To be filled in after analysis*
+- **Reuse benefits**: Prefix reuse can skip reading/writing KV for repeated prefixes; tracked via `num_cached_tokens`
+- **Hash lookup cost**: xxhash64 per block; should be negligible vs compute but may matter with many short blocks
+- **Fragmentation risk**: Partial blocks cannot be reused until full; prompts that end mid-block reduce reuse efficiency
+- **Capacity constraint**: Scheduling is gated by `can_allocate` / `can_append`; OOM avoided by pre-checks, but head-of-line blocking can occur
+- **Cache locality**: Block IDs do not imply physical proximity; actual KV tensors likely contiguous by block ID (needs confirmation in model runner)
 
 ## Key Insights
 
-*To be written after completing analysis*
-
-1. 
-2. 
-3. 
-4. 
-5. 
+1. **Block-based KV cache** with hash-chained prefixes enables prefix reuse without copying data.
+2. **Static pool + dynamic mapping**: Allocation is just table updates; no per-request tensor allocation → low overhead.
+3. **Partial-block inefficiency**: Reuse only triggers on full blocks; short prompts reduce hit rate — opportunity to pad or group.
+4. **Scheduler is cache-aware**: Refuses to schedule if blocks unavailable; can preempt to free blocks during decode.
+5. **Fusion impact**: Reducing per-token latency helps decode, but cache hit rate also critical—should measure `num_cached_tokens` vs total.
 
 ## Code Examples
 
@@ -80,11 +92,13 @@ Document important memory management patterns:
 
 ## Questions for Investigation
 
-- [ ] How is memory pre-allocated?
-- [ ] What is the maximum batch size?
-- [ ] How does memory scale with sequence length?
-- [ ] How is memory reclaimed between batches?
-- [ ] What are memory fragmentation issues?
+- [x] How is memory pre-allocated? → **Static block pool at init**
+- [x] What is the maximum batch size? → **Scheduler limited by `max_num_seqs` and `max_num_batched_tokens` plus block availability**
+- [x] How does memory scale with sequence length? → **Linear in blocks: ceil(seq_len / 256) blocks**
+- [x] How is memory reclaimed between batches? → **On finish or preempt: `deallocate` decrements `ref_count` and frees**
+- [ ] What are memory fragmentation issues? → **Partial blocks reduce reuse; need measurement**
+- [ ] What is cache hit rate in practice? → **Requires runtime metrics on real prompts**
+- [ ] How are KV tensors laid out physically? → **Need to inspect model_runner implementation**
 
 ## References
 
