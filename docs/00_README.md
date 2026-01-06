@@ -1,42 +1,42 @@
 # Documentation Index
 
-This directory contains all research, analysis, and technical documentation for the nano-vLLM optimization project.
+This directory contains research, analysis, and technical documentation for the nano-vLLM optimization project.
 
-## Phase 1: Understanding & Analysis (Weeks 1-6)
+## Phase 1: Understanding and Analysis (Weeks 1-6)
 
-- [01_nano_vllm_architecture.md](01_nano_vllm_architecture.md)
+- [01_architecture.md](01_architecture.md)
   - Project structure and design philosophy
-  - Component overview (engine, layers, models, utils)
+  - Component overview
   - Entry points and execution flow
 
 - [02_memory_management.md](02_memory_management.md)
   - KV cache management strategies
   - Memory allocation patterns
-  - Comparison with vLLM's approach
+  - Comparison with vLLM approach
   - Optimization opportunities
 
-- [03_attention_analysis.md](03_attention_analysis.md)
+- [03_attention.md](03_attention.md)
   - Attention mechanism implementation
-  - RMSNorm and Linear layers pairing
+  - RMSNorm and Linear layer pairing
   - Fusion opportunities
   - Current bottlenecks
 
-- [04_baseline_metrics.md](04_baseline_metrics.md)
+- [04_baseline.md](04_baseline.md)
   - Baseline performance measurements
   - Test scenarios and configurations
   - Metrics: latency, throughput, memory usage
-  - Results table and analysis
+  - Results and analysis
 
-- [05_nano_vs_vllm_comparison.md](05_nano_vs_vllm_comparison.md)
+- [05_comparison.md](05_comparison.md)
   - PagedAttention scheduling comparison
   - Memory model differences
   - Performance characteristics
-  - Trade-offs analysis
+  - Trade-off analysis
 
 ## Phase 2: Implementation (Weeks 7-14)
 
 - [06_fusion_design.md](06_fusion_design.md)
-  - RMSNorm+Linear fusion kernel design
+  - RMSNorm and Linear fusion kernel design
   - Algorithm and mathematical formulation
   - Memory optimization strategy
   - Block sizing and parameters
@@ -47,7 +47,7 @@ This directory contains all research, analysis, and technical documentation for 
   - Data type handling
   - Batch processing strategies
 
-- [08_validation_report.md](08_validation_report.md)
+- [08_validation.md](08_validation.md)
   - Numerical correctness verification
   - Test cases and results
   - Integration testing
@@ -55,27 +55,27 @@ This directory contains all research, analysis, and technical documentation for 
 
 ## Phase 3: Performance Profiling (Weeks 15-18)
 
-- [09_performance_analysis.md](09_performance_analysis.md)
+- [09_performance.md](09_performance.md)
   - Nsight Systems profiling results
   - Bottleneck analysis
   - Kernel execution time breakdown
   - Memory bandwidth utilization
 
-- [10_benchmark_comparison.md](10_benchmark_comparison.md)
-  - Performance improvements (10-15% latency target)
+- [10_benchmarks.md](10_benchmarks.md)
+  - Performance improvements
   - Throughput and memory efficiency gains
-  - Comparison: baseline vs optimized
+  - Baseline versus optimized comparison
   - Hardware-specific results
 
-## Phase 4 & 5: Documentation & Polish
+## Phase 4 and 5: Documentation and Polish
 
-- [CHALLENGES_AND_SOLUTIONS.md](CHALLENGES_AND_SOLUTIONS.md)
+- [challenges.md](challenges.md)
   - Problems encountered during implementation
   - Root cause analysis
   - Solutions implemented
   - Alternative approaches considered
 
-- [IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md)
+- [implementation_guide.md](implementation_guide.md)
   - Step-by-step reproduction instructions
   - Environment setup
   - Building and testing procedures
@@ -85,23 +85,23 @@ This directory contains all research, analysis, and technical documentation for 
 ## Document Writing Guidelines
 
 ### Structure
-Each technical document should follow this structure:
-1. **Overview**: Brief summary (2-3 sentences)
-2. **Background**: Context and motivation
-3. **Analysis/Findings**: Main content with headings
-4. **Key Insights**: Summarize important takeaways
-5. **References**: Links to code and external resources
+Each technical document follows this structure:
+1. Overview: Brief summary
+2. Background: Context and motivation
+3. Analysis and Findings: Main content with headings
+4. Key Insights: Important takeaways
+5. References: Links to code and external resources
 
 ### Content Guidelines
 - Use clear headings and subheadings
 - Include code snippets when demonstrating concepts
-- Add diagrams/tables for complex information
-- Reference file paths: `nanovllm/llm.py`, `vllm/attention/`
+- Add diagrams and tables for complex information
+- Reference file paths using monospace font
 - Include concrete examples and test cases
 
 ### Code Blocks
 ```python
-# Example: How to format code
+# Example code formatting
 def example_function():
     """Document with clear docstrings."""
     pass
@@ -115,7 +115,7 @@ Use markdown tables for comparisons:
 | Example | - | - | - |
 
 ### Progress Tracking
-Mark completed items as you write:
+Mark completed items:
 - [x] Completed section
 - [ ] Pending section
 

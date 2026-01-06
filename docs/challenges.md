@@ -15,7 +15,7 @@ This document records challenges encountered during the nano-vLLM optimization p
 **Date Encountered**: [Date]  
 **Phase**: [Phase number]  
 **Severity**: Critical | High | Medium | Low  
-**Status**: ⏳ Open | 🔧 In Progress | ✅ Resolved | 📌 Deferred
+**Status**: Open | In Progress | Resolved | Deferred
 
 **Description**:
 [Detailed description of the problem]
@@ -55,14 +55,14 @@ This document records challenges encountered during the nano-vLLM optimization p
 - [External resources]
 ```
 
-## Phase 1: Understanding & Analysis
+## Phase 1: Understanding and Analysis
 
 ### Challenge #1: flash-attn Compilation Timeout
 
 **Date Encountered**: January 5, 2026  
 **Phase**: 1.5 (nano-vLLM Installation)  
 **Severity**: High  
-**Status**: ✅ Resolved
+**Status**: Resolved
 
 **Description**:
 Attempted to install nano-vllm from source with `pip install -e .`. The flash-attn dependency compiled from source for over 1 hour, compiling multiple CUDA kernel variants (SM80, SM90 architectures). Blocked progress on benchmark execution.
@@ -122,7 +122,7 @@ print(flash_attn.__version__)  # Output: 2.8.3
 **Date Encountered**: January 5, 2026  
 **Phase**: 1.5 (nano-vLLM Installation)  
 **Severity**: Critical  
-**Status**: ✅ Resolved
+**Status**: Resolved
 
 **Description**:
 nano-vllm attempts to download Qwen2-1.5B-Instruct model from huggingface.co during initialization. All requests to huggingface.co blocked by Great Firewall (GFW) in mainland China. Error messages included timeouts and connection refused errors.
@@ -200,7 +200,7 @@ python -c "import transformers; print('offline mode ok')"
 **Date Encountered**: January 5, 2026  
 **Phase**: 1.5 (nano-vLLM Initialization)  
 **Severity**: High  
-**Status**: ✅ Resolved
+**Status**: Resolved
 
 **Description**:
 `LLM()` initialization failed with error:
@@ -281,7 +281,7 @@ print('Model loaded successfully')
 **Date Encountered**: January 5, 2026  
 **Phase**: 1.5 (nano-vLLM Initialization)  
 **Severity**: Medium  
-**Status**: ✅ Resolved
+**Status**: Resolved
 
 **Description**:
 Initial attempt to load model used incomplete path:
